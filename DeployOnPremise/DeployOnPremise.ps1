@@ -18,8 +18,7 @@ try {
 
     $instance = $settings.onPremServerInstance
     if ($instance -eq '') {
-        OutputWarning "Setting onPremServerInstance needs to be specified".
-        $instance = 'test'
+        throw "Setting onPremServerInstance needs to be specified".
     }
 
     $tenant = $settings.onPremServerTenant
@@ -86,5 +85,4 @@ catch {
     OutputError -message "Deploy On Premise failed.$([environment]::Newline)Error: $($_.Exception.Message)$([environment]::Newline)Stacktrace: $($_.scriptStackTrace)"
 }
 finally {
-    # CleanupAfterBcContainerHelper -bcContainerHelperPath $bcContainerHelperPath
 }
