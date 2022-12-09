@@ -8,7 +8,7 @@ function InstallOrUpgradeApp {
     $app = Get-NAVAppInfo -Path $path
     $published = Get-NAVAppInfo -ServerInstance $instance -Name $app.Name -Publisher $app.Publisher -TenantSpecificProperties -Tenant $tenant
 
-    $installed = $published | Where-Object -Property 'IsInstalled' -EQ -Value True -First | Select-Object -First
+    $installed = $published | Where-Object -Property 'IsInstalled' -EQ -Value True | Select-Object -First
 
     Publish-NAVApp -ServerInstance $instance -Path $path    
     if ($installed) {        
