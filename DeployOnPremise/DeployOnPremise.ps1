@@ -55,14 +55,14 @@ try {
     $appFiles | ForEach-Object {
         $app = Get-NAVAppInfo -Path $_.FullName
         if ($app.Dependencies.Count -eq 0) {
-            InstallOrUpgradeApp -Path $appFiles.FullName -instance 'default' -tenant 'default'
+            InstallOrUpgradeApp -Path $_.FullName -instance 'default' -tenant 'default'
         }
     }
 
     $appFiles | ForEach-Object {
         $app = Get-NAVAppInfo -Path $_.FullName
         if ($app.Dependencies.Count -gt 0) {
-            InstallOrUpgradeApp -Path $appFiles.FullName -instance 'default' -tenant 'default'
+            InstallOrUpgradeApp -Path $_.FullName -instance 'default' -tenant 'default'
         }
     }    
 }
