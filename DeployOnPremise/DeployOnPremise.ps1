@@ -14,6 +14,8 @@ try {
     . (Join-Path -Path $PSScriptRoot -ChildPath "..\AL-Go-Helper.ps1" -Resolve)
     . (Join-Path -Path $PSScriptRoot -ChildPath "InstallOrUpgradeApp.ps1" -Resolve)
 
+    Write-Host "Settings:", $settingsJson
+
     $settings = $settingsJson | ConvertFrom-Json
 
     Write-Host $settingsJson
