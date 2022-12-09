@@ -1,6 +1,10 @@
 Param(
     [Parameter(HelpMessage = "The GitHub token running the action", Mandatory = $false)]
     [string] $token
+    [Parameter(HelpMessage = "ServerInstance to install apps to", Mandatory = $true)]
+    [string] $instance,
+    [Parameter(HelpMessage = "Tenant to install apps to", Mandatory = $false)]
+    [string] $tenant = 'default'
 )
 
 $ErrorActionPreference = "Stop"
@@ -9,6 +13,8 @@ $telemetryScope = $null
 $bcContainerHelperPath = $null
 
 try {
+    .InstallOrUpgradeApp.ps1
+
     $headers = @{
         Authorization="Bearer $token"
     }
@@ -44,28 +50,24 @@ try {
     Import-Module "C:\Program Files\Microsoft Dynamics 365 Business Central\190\Service\Microsoft.Dynamics.Nav.Apps.Management.psd1"
 
     $appFiles = Get-ChildItem -Path $temp -Filter *.app
-    
+
     $appFiles | ForEach-Object {
         $app = Get-NAVAppInfo -Path $_.FullName
-        
         if ($app.Dependencies.Count -eq 0) {
-            Publish-NAVApp -ServerInstance $instance -Path $_.FullName
-            Sync-NAVApp -ServerInstance $instance -Publisher $app.Publisher -Name $app.Name -Version $app.Version -Force
-            Install-NAVApp -ServerInstance $instance -Publisher $app.Publisher -Name $app.Name -Version $app.Version -Force            
+            InstallOrUpgradeApp -Path $appFiles.FullName -instance 'default' -tenant 'default'
         }
     }
 
-    Write-Host "Publishing $($app.Name)"
-
-    if ($app.Dependencies.Count -gt 0) {
-    $app.Dependencies | ForEach-Object {
-      Write-Host "Publishing dependency $($_.Name)"
-    }
+    $appFiles | ForEach-Object {
+        $app = Get-NAVAppInfo -Path $_.FullName
+        if ($app.Dependencies.Count -gt 0) {
+            InstallOrUpgradeApp -Path $appFiles.FullName -instance 'default' -tenant 'default'
+        }
+    }    
 }
 catch {
-    OutputError -message "Deploy action failed.$([environment]::Newline)Error: $($_.Exception.Message)$([environment]::Newline)Stacktrace: $($_.scriptStackTrace)"
-    TrackException -telemetryScope $telemetryScope -errorRecord $_
+    OutputError -message "Deploy On Premise failed.$([environment]::Newline)Error: $($_.Exception.Message)$([environment]::Newline)Stacktrace: $($_.scriptStackTrace)"
 }
 finally {
-    CleanupAfterBcContainerHelper -bcContainerHelperPath $bcContainerHelperPath
+    # CleanupAfterBcContainerHelper -bcContainerHelperPath $bcContainerHelperPath
 }
