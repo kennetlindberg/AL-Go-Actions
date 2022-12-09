@@ -1,7 +1,7 @@
 Param(
     [Parameter(HelpMessage = "The GitHub token running the action", Mandatory = $false)]
     [string] $token,
-    [Parameter]
+    [Parameter(Mandatory = $false)]
     [string] $settingsJson
 )
 
