@@ -13,7 +13,8 @@ $telemetryScope = $null
 $bcContainerHelperPath = $null
 
 try {
-    .InstallOrUpgradeApp.ps1
+    . (Join-Path -Path $PSScriptRoot -ChildPath "..\AL-Go-Helper.ps1" -Resolve)
+    . (Join-Path -Path $PSScriptRoot -ChildPath "InstallOrUpgradeApp.ps1" -Resolve)    
 
     $headers = @{
         Authorization="Bearer $token"
@@ -66,7 +67,7 @@ try {
     }    
 }
 catch {
-    Write-Host "Deploy On Premise failed.$([environment]::Newline)Error: $($_.Exception.Message)$([environment]::Newline)Stacktrace: $($_.scriptStackTrace)"
+    OutputError -message "Deploy On Premise failed.$([environment]::Newline)Error: $($_.Exception.Message)$([environment]::Newline)Stacktrace: $($_.scriptStackTrace)"
 }
 finally {
     # CleanupAfterBcContainerHelper -bcContainerHelperPath $bcContainerHelperPath
