@@ -44,7 +44,7 @@ try {
     $path = "$temp/$($artifact.Name).zip"
     Invoke-RestMethod -Uri "$base/actions/artifacts/$($artifact.Id)/zip" -Headers $headers -OutFile $path
 
-    Expand-Archive -Path $path -DestinationPath $temp
+    Expand-Archive -Path $path -DestinationPath $temp -Force
 
     $instance = 'test'
     Import-Module "C:\Program Files\Microsoft Dynamics 365 Business Central\190\Service\Microsoft.Dynamics.Nav.Apps.Management.psd1"
