@@ -6,11 +6,11 @@ function InstallOrUpgradeApp {
     )
 
     $app = Get-NAVAppInfo -Path $path
-    $published = Get-NAVAppInfo -Name $app.Name -Publisher $app.Publisher -TenantSpecificProperties -Tenant $tenant
+    $published = Get-NAVAppInfo -ServerInstance $instance -Name $app.Name -Publisher $app.Publisher -TenantSpecificProperties -Tenant $tenant
 
     # Unpublish uninstalled versions
     $published | Where-Object -Property 'IsInstalled' -EQ -Value False | ForEach-Object {
-        Unpublish-NAVApp -Name $_.Name -Publisher $_.Publisher -Version $_.Version
+        Unpublish-NAVApp -ServerInstance $instance -Name $_.Name -Publisher $_.Publisher -Version $_.Version
     }
 
     $installed = $published | Where-Object -Property 'IsInstalled' -EQ -Value True -First | Select-Object -First
