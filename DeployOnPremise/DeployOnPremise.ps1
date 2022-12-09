@@ -14,7 +14,7 @@ $bcContainerHelperPath = $null
 
 try {
     . (Join-Path -Path $PSScriptRoot -ChildPath "..\AL-Go-Helper.ps1" -Resolve)
-    . (".\InstallOrUpgradeApp.ps1")
+    . (Join-Path -Path $PSScriptRoot -ChildPath "\DeployOnPremise\InstallOrUpgradeApp.ps1" -Resolve)
 
     $headers = @{
         Authorization="Bearer $token"
