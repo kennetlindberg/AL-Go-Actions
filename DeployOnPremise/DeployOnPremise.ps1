@@ -1,10 +1,8 @@
 Param(
     [Parameter(HelpMessage = "The GitHub token running the action", Mandatory = $false)]
     [string] $token,
-    [Parameter(HelpMessage = "ServerInstance to install apps to", Mandatory = $true)]
-    [string] $instance,
-    [Parameter(HelpMessage = "Tenant to install apps to", Mandatory = $false)]
-    [string] $tenant = 'default'
+    [Parameter]
+    [string] $settingsJson
 )
 
 $ErrorActionPreference = "Stop"
@@ -15,6 +13,17 @@ $bcContainerHelperPath = $null
 try {
     . (Join-Path -Path $PSScriptRoot -ChildPath "..\AL-Go-Helper.ps1" -Resolve)
     . (Join-Path -Path $PSScriptRoot -ChildPath "InstallOrUpgradeApp.ps1" -Resolve)
+
+    $settings = $settingsJson | ConvertFrom-Json
+
+    $instance = $settings.onPremServerInstance
+    if ($instance -eq '') {
+        throw "Setting onPremServerInstance needs to be specified".
+    }
+    $tenant = $settings.onPremServerTenant
+    if ($tenant -eq '') {
+        $tenant = 'default'
+    }
 
     $headers = @{
         Authorization="Bearer $token"
@@ -46,6 +55,8 @@ try {
     Invoke-RestMethod -Uri "$base/actions/artifacts/$($artifact.Id)/zip" -Headers $headers -OutFile $path
 
     Expand-Archive -Path $path -DestinationPath $temp -Force
+
+    $instance = $settings.onPremServerInstance
 
     #"C:\Program Files\Microsoft Dynamics 365 Business Central\200\Service\Microsoft.Dynamics.Nav.Server.exe" $BC200 /config "C:\Program Files\Microsoft Dynamics 365 Business Central\200\Service\Microsoft.Dynamics.Nav.Server.exe.config"
     $imagePath = Get-ItemPropertyValue -Path "HKLM:\SYSTEM\CurrentControlSet\Services\MicrosoftDynamicsNavServer`$$instance" -Name 'ImagePath'
