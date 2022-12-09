@@ -217,7 +217,7 @@ function DownloadAndImportBcContainerHelper {
                             }
                         }
                         else {
-                            $bcContainerHelperVersion = "https://github.com/$owner/navcontainerhelper/archive/master.zip"
+                            $bcContainerHelperVersion = "https://github.com/feddydk/navcontainerhelper/archive/master.zip"
                         }
                     }
                 }
