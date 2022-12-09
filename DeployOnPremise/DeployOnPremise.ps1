@@ -40,8 +40,19 @@ try {
 
     Expand-Archive -Path $path -DestinationPath $temp
 
-    Get-ChildItem -Path $temp -Filter *.app | ForEach-Object {
+    $instance = 'test'
+    Import-Module "C:\Program Files\Microsoft Dynamics 365 Business Central\190\Service\Microsoft.Dynamics.Nav.Apps.Management.psd1"
+
+    $appFiles = Get-ChildItem -Path $temp -Filter *.app
+    
+    $appFiles | ForEach-Object {
         $app = Get-NAVAppInfo -Path $_.FullName
+        
+        if ($app.Dependencies.Count -eq 0) {
+            Publish-NAVApp -ServerInstance $instance -Path $_.FullName
+            Sync-NAVApp -ServerInstance $instance -Publisher $app.Publisher -Name $app.Name -Version $app.Version -Force
+            Install-NAVApp -ServerInstance $instance -Publisher $app.Publisher -Name $app.Name -Version $app.Version -Force            
+        }
     }
 
     Write-Host "Publishing $($app.Name)"
