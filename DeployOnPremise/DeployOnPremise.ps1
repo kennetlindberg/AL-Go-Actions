@@ -51,7 +51,7 @@ try {
     $imagePath = Get-ItemPropertyValue -Path "HKLM:\SYSTEM\CurrentControlSet\Services\MicrosoftDynamicsNavServer`$$instance" -Name 'ImagePath'
     $imagePath = $imagePath.Split('"')[1]
     $imagePath = Split-Path $imagePath -Parent
-    Import-Module -Path (Join-Path $imagePath 'Microsoft.Dynamics.Nav.Apps.Management.psd1')
+    Import-Module (Join-Path $imagePath 'Microsoft.Dynamics.Nav.Apps.Management.psd1')
     
     $appFiles = Get-ChildItem -Path $temp -Filter *.app
 
