@@ -66,7 +66,7 @@ try {
     }    
 }
 catch {
-    OutputError -message "Deploy On Premise failed.$([environment]::Newline)Error: $($_.Exception.Message)$([environment]::Newline)Stacktrace: $($_.scriptStackTrace)"
+    Write-Host "Deploy On Premise failed.$([environment]::Newline)Error: $($_.Exception.Message)$([environment]::Newline)Stacktrace: $($_.scriptStackTrace)"
 }
 finally {
     # CleanupAfterBcContainerHelper -bcContainerHelperPath $bcContainerHelperPath
