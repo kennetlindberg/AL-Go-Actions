@@ -47,9 +47,13 @@ try {
 
     Expand-Archive -Path $path -DestinationPath $temp -Force
 
-    $instance = 'test'
-    Import-Module "C:\Program Files\Microsoft Dynamics 365 Business Central\190\Service\Microsoft.Dynamics.Nav.Apps.Management.psd1"
+    #"C:\Program Files\Microsoft Dynamics 365 Business Central\200\Service\Microsoft.Dynamics.Nav.Server.exe" $BC200 /config "C:\Program Files\Microsoft Dynamics 365 Business Central\200\Service\Microsoft.Dynamics.Nav.Server.exe.config"
+    $imagePath = Get-ItemPropertyValue -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\MicrosoftDynamicsNavServer$' + $instance -Name 'ImagePath'
+    $imagePath = $imagePath.Split('"')[1]
+    $imagePath = Split-Path $imagePath -Parent
+    Import-Module -Path (Join-Path $imagePath 'Microsoft.Dynamics.Nav.Apps.Management.psd1')
 
+    $instance = 'test'
     $appFiles = Get-ChildItem -Path $temp -Filter *.app
 
     $appFiles | ForEach-Object {
