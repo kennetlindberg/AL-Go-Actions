@@ -14,16 +14,14 @@ try {
     . (Join-Path -Path $PSScriptRoot -ChildPath "..\AL-Go-Helper.ps1" -Resolve)
     . (Join-Path -Path $PSScriptRoot -ChildPath "InstallOrUpgradeApp.ps1" -Resolve)
 
-    Write-Host "Settings:", $settingsJson
-
     $settings = $settingsJson | ConvertFrom-Json
-
-    Write-Host $settingsJson
 
     $instance = $settings.onPremServerInstance
     if ($instance -eq '') {
-        throw "Setting onPremServerInstance needs to be specified".
+        OutputWarning "Setting onPremServerInstance needs to be specified".
+        $instance = 'test'
     }
+
     $tenant = $settings.onPremServerTenant
     if ($tenant -eq '') {
         $tenant = 'default'
