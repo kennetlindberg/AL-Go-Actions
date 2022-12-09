@@ -5,20 +5,23 @@ inputs:
     description: The GitHub token running the action
     required: false
     default: ${{ github.token }}  
+  instance:
+    description: The GitHub token running the action
+    required: true
+  tenant:
+    description: The GitHub token running the action
+    required: false
+    default: 'default'
 runs:
   using: composite
   steps:
     - name: run
       shell: PowerShell
       env:
-        _actor: ${{ inputs.actor }}
         _token: ${{ inputs.token }}
-        _parentTelemetryScopeJson: ${{ inputs.parentTelemetryScopeJson }}
-        _projects: ${{ inputs.projects }}
-        _environmentName: ${{ inputs.environmentName }}
-        _artifacts: ${{ inputs.artifacts }}
-        _type: ${{ inputs.type }}
-      run: try { ${{ github.action_path }}/Deploy.ps1 -actor $ENV:_actor -token $ENV:_token -parentTelemetryScopeJson $ENV:_parentTelemetryScopeJson -projects $ENV:_projects -environmentName $ENV:_environmentName -artifacts $ENV:_artifacts -type $ENV:_type } catch { Write-Host "::Error::Unexpected error when running action ($($_.Exception.Message.Replace("`r",'').Replace("`n",' ')))"; exit 1 }
+        _instance: ${{ inputs.instance }}
+        _tenant: ${{ inputs.tenant }}
+      run: try { ${{ github.action_path }}/DeployOnPremise.ps1 -token $ENV:_token -instance $ENV:_instance -tenant $ENV:_tenant } catch { Write-Host "::Error::Unexpected error when running action ($($_.Exception.Message.Replace("`r",'').Replace("`n",' ')))"; exit 1 }
 branding:
   icon: terminal
   color: blue
