@@ -1,0 +1,24 @@
+name: Powershell Script
+author: Kennet Lindberg
+inputs:
+  token:
+    description: The GitHub token running the action
+    required: false
+    default: ${{ github.token }}  
+runs:
+  using: composite
+  steps:
+    - name: run
+      shell: PowerShell
+      env:
+        _actor: ${{ inputs.actor }}
+        _token: ${{ inputs.token }}
+        _parentTelemetryScopeJson: ${{ inputs.parentTelemetryScopeJson }}
+        _projects: ${{ inputs.projects }}
+        _environmentName: ${{ inputs.environmentName }}
+        _artifacts: ${{ inputs.artifacts }}
+        _type: ${{ inputs.type }}
+      run: try { ${{ github.action_path }}/Deploy.ps1 -actor $ENV:_actor -token $ENV:_token -parentTelemetryScopeJson $ENV:_parentTelemetryScopeJson -projects $ENV:_projects -environmentName $ENV:_environmentName -artifacts $ENV:_artifacts -type $ENV:_type } catch { Write-Host "::Error::Unexpected error when running action ($($_.Exception.Message.Replace("`r",'').Replace("`n",' ')))"; exit 1 }
+branding:
+  icon: terminal
+  color: blue
