@@ -1,6 +1,6 @@
 Param(
     [Parameter(HelpMessage = "The GitHub token running the action", Mandatory = $false)]
-    [string] $token
+    [string] $token,
     [Parameter(HelpMessage = "ServerInstance to install apps to", Mandatory = $true)]
     [string] $instance,
     [Parameter(HelpMessage = "Tenant to install apps to", Mandatory = $false)]
