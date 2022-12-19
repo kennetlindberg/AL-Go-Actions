@@ -18,6 +18,7 @@ try {
 
     $instance = $settings.onPremServerInstance
     if ($instance -eq '') {
+        Write-Host $settings
         throw "Setting onPremServerInstance needs to be specified".
     }
 
