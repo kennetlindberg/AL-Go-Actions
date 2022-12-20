@@ -18,8 +18,7 @@ try {
 
     $instance = $settings.onPremServerInstance
     if ($instance -eq '') {
-        Write-Output $settingsJson
-        throw "Setting onPremServerInstance needs to be specified".
+        $instance = 'test'
     }
 
     $tenant = $settings.onPremServerTenant
