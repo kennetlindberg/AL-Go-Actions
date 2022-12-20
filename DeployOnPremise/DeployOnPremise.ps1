@@ -16,6 +16,10 @@ try {
 
     $settings = $settingsJson | ConvertFrom-Json
 
+    Write-Output $settings
+    
+    Write-Output $settingsJson
+
     $instance = $settings.onPremServerInstance
     if ($instance -eq '') {
         throw "Setting onPremServerInstance needs to be specified".
