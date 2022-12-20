@@ -5,9 +5,6 @@ inputs:
     description: The GitHub token running the action
     required: false
     default: ${{ github.token }}  
-  settingsJson:
-    description: Settings from repository in compressed Json format
-    required: true
 runs:
   using: composite
   steps:
@@ -15,8 +12,7 @@ runs:
       shell: PowerShell
       env:
         _token: ${{ inputs.token }}
-        _settingsJson: ${{ inputs.settingsJson }}
-      run: try { ${{ github.action_path }}/DeployOnPremise.ps1 -token $ENV:_token -settingsJson $ENV:_settingsJson } catch { Write-Host "::Error::Unexpected error when running action ($($_.Exception.Message.Replace("`r",'').Replace("`n",' ')))"; exit 1 }
+      run: try { ${{ github.action_path }}/DeployOnPremise.ps1 -token $ENV:_token } catch { Write-Host "::Error::Unexpected error when running action ($($_.Exception.Message.Replace("`r",'').Replace("`n",' ')))"; exit 1 }
 branding:
   icon: terminal
   color: blue

@@ -1,8 +1,6 @@
 Param(
     [Parameter(HelpMessage = "The GitHub token running the action", Mandatory = $false)]
-    [string] $token,
-    [Parameter(Mandatory = $false)]
-    [string] $settingsJson
+    [string] $token
 )
 
 $ErrorActionPreference = "Stop"
@@ -14,11 +12,7 @@ try {
     . (Join-Path -Path $PSScriptRoot -ChildPath "..\AL-Go-Helper.ps1" -Resolve)
     . (Join-Path -Path $PSScriptRoot -ChildPath "InstallOrUpgradeApp.ps1" -Resolve)
 
-    Write-Warning -Message $settingsJson
-
     $settings = ReadSettings -baseFolder $ENV:GITHUB_WORKSPACE -workflowName $env:GITHUB_WORKFLOW
-
-    # $settings = $settingsJson | ConvertFrom-Json
 
     $instance = $settings.onPremServerInstance
     if ($instance -eq '') {
