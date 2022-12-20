@@ -21,7 +21,7 @@ function InstallOrUpgradeApp {
             Start-NAVAppDataUpgrade -ServerInstance $instance -Publisher $app.Publisher -Name $app.Name -Version $app.Version -Force
             Unpublish-NAVApp -ServerInstance $instance -Publisher $installed.Publisher -Name $installed.Name -Version $installed.Version
         } else {
-            Write-Host "Same or newer version ($($installed.Version)) is already installed"
+            Write-Host "Same or newer version is already installed ($($installed.Version))"
         }
     } else {
         Write-Host "Installing $($app.Name) ($($app.Version))"
