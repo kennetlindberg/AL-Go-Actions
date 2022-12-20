@@ -57,8 +57,6 @@ try {
 
     Expand-Archive -Path $path -DestinationPath $temp -Force
 
-    $instance = $settings.onPremServerInstance
-
     #"C:\Program Files\Microsoft Dynamics 365 Business Central\200\Service\Microsoft.Dynamics.Nav.Server.exe" $BC200 /config "C:\Program Files\Microsoft Dynamics 365 Business Central\200\Service\Microsoft.Dynamics.Nav.Server.exe.config"
     $imagePath = Get-ItemPropertyValue -Path "HKLM:\SYSTEM\CurrentControlSet\Services\MicrosoftDynamicsNavServer`$$instance" -Name 'ImagePath'
     $imagePath = $imagePath.Split('"')[1]
