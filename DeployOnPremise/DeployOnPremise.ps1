@@ -18,7 +18,7 @@ try {
 
     $instance = $settings.onPremServerInstance
     if ($instance -eq '') {
-        $instance = 'test'
+        throw "Setting onPremServerInstance needs to be specified".
     }
 
     $tenant = $settings.onPremServerTenant
