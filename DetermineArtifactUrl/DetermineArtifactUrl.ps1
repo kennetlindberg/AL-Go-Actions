@@ -13,14 +13,13 @@ try {
     DownloadAndImportBcContainerHelper
     Import-Module (Join-Path -Path $PSScriptRoot -ChildPath "..\TelemetryHelper.psm1" -Resolve) -DisableNameChecking
     #endregion
-    
+
     #region Action: Determine artifacts to use
     $telemetryScope = CreateScope -eventId 'DO0084' -parentTelemetryScopeJson $parentTelemetryScopeJson
-    $secrets = $env:Secrets | ConvertFrom-Json | ConvertTo-HashTable
-    $insiderSasToken = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($secrets.insiderSasToken))
+
     $settings = $env:Settings | ConvertFrom-Json | ConvertTo-HashTable
-    $settings = AnalyzeRepo -settings $settings -project $project -doNotCheckArtifactSetting -doNotCheckAppDependencyProbingPaths -doNotIssueWarnings
-    $artifactUrl = Determine-ArtifactUrl -projectSettings $settings -insiderSasToken $insiderSasToken
+    $settings = AnalyzeRepo -settings $settings -project $project -doNotCheckArtifactSetting -doNotIssueWarnings
+    $artifactUrl = DetermineArtifactUrl -projectSettings $settings
     $artifactCacheKey = ''
     if ($settings.useCompilerFolder) {
         $artifactCacheKey = $artifactUrl.Split('?')[0]
@@ -38,7 +37,7 @@ try {
     TrackTrace -telemetryScope $telemetryScope
 }
 catch {
-    if ($env:BcContainerHelperPath) {
+    if (Get-Module BcContainerHelper) {
         TrackException -telemetryScope $telemetryScope -errorRecord $_
     }
     throw
